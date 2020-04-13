@@ -1,0 +1,1 @@
+Qt Dynamic Object Management
