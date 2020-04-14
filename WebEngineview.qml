@@ -83,8 +83,4 @@ WebEngineView {
         }
     }
 
-    function printPage(){
-
-    }
-
 }
