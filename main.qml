@@ -11,22 +11,22 @@ Window {
     title: qsTr("Hello World")
 
     property var webPage: null
-    property bool buttonToggle: true
+    property bool buttonToggle: false
     property var component;
     property var sprite;
-    property url webSiteUrl: "https://muhammetkucuk.com/"
+    property url webSiteUrl: "https://v3demo.mediasoup.org/?roomId=xmnvnsaf"
 
-    function createSpriteObjects() {
-        component = Qt.createComponent("WebEngineview.qml");
-        if (component.status === Component.Ready)
-            finishCreation();
-        else
-            component.statusChanged.connect(finishCreation);
-    }
+//    function createSpriteObjects() {
+//        component = Qt.createComponent("WebEngineview.qml");
+//        if (component.status === Component.Ready)
+//            finishCreation();
+//        else
+//            component.statusChanged.connect(finishCreation);
+//    }
 
     function finishCreation() {
         if (component.status === Component.Ready) {
-            sprite = component.createObject(appWindow, {"x": 0, "y": 0, "url":webSiteUrl});
+            sprite = component.createObject(appWindow, {"x": 0, "y": 0, "url":textInput.text});
             if (sprite === null) {
                 // Error Handling
                 console.log("Error creating object");
@@ -35,6 +35,17 @@ Window {
             // Error Handling
             console.log("Error loading component:", component.errorString());
         }
+    }
+
+    Button {
+        id: printButton
+        z: 1
+        visible: buttonToggle
+        anchors.top: parent.top
+        anchors.right: parent.right
+        width: 150
+        text: "Print Page"
+        onClicked: sprite.printToPdf("/Users/muhammetkucuk/Training/build-webOpenClose-Desktop_Qt_5_14_1_clang_64bit-Debug/appDownloads/print.pdf")
     }
 
     Button {
@@ -66,5 +77,28 @@ Window {
         }
     }
 
-    Component.onCompleted: createSpriteObjects()
+    Rectangle {
+        color: "gray"
+        anchors.left: createButton.right
+        anchors.top: createButton.top
+        anchors.bottom: createButton.bottom
+        width: textInput.implicitWidth !== 0 ? textInput.implicitWidth : 150
+        z: 1
+        TextInput{
+            z: 1
+            id: textInput
+            anchors.fill: parent
+            selectByMouse: true
+            text: "https://v3demo.mediasoup.org/?roomId=xmnvnsaf"
+        }
+        MouseArea{
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.IBeamCursor
+        }
+    }
+
+
+
+    Component.onCompleted: component = Qt.createComponent("WebEngineview.qml");
 }
